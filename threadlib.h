@@ -32,7 +32,7 @@ typedef struct MyThread_list_t{
 
 //Below lines declare Queue related functions
 extern Mythread_queue ready_queue;
-extern _Mythread* currRunningThread
+extern _Mythread* currRunningThread;
 
 Mythread RemFromQueue(Mythread_queue*);
 void InitQueue(Mythread_queue*);
