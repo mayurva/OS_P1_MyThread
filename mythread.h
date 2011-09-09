@@ -2,7 +2,7 @@
  *
  *  File Name........: mythread.h
  *
- *  Description......:
+ *  Description......: Header file not to be modified
  *
  *  Created by vin on 11/21/06
  *
