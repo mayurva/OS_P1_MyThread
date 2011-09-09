@@ -1,16 +1,16 @@
 #include<stdlib.h>
 #include"mythread.h"
 
-typedef struct Mythread_{
-	struct Mythread_ *childlist;
+typedef struct _MyThread_{
+	struct _MyThread_ *childlist;
 	ucontext_t pthread;
-	struct Mythread_ *next;
-} Mythread;
+	struct _MyThread_ *next;
+} _MyThread;
 
 
-Mythread MyThreadCreate(void(*start_funct)(void *), void *args)
+MyThread MyThreadCreate(void(*start_funct)(void *), void *args)
 {
-	Mythread thread;
+	MyThread thread;
 	int size_arr[100];	//this should be 8KB
 	thread.childlist=thread.next=NULL;
 	thread.pthread.uc_link = NULL; //set the return point to main function
@@ -27,7 +27,7 @@ void MyThreadYield(void)
 	if(!(null_queue(ready_queue)))
 	{
 		printf("Inside if of yeild\n");
-		Mythread thread, temp;
+		MyThread thread, temp;
 		getcontext(&(thread.pthread));
 		add_to_queue(&ready_queue,thread);
 		thread = rem_from_queue(&ready_queue);
@@ -39,7 +39,7 @@ void MyThreadExit(void)
 	printf("Inside Exit\n");
 	if(!(null_queue(ready_queue)))
 	{
-		Mythread thread;
+		MyThread thread;
 		thread = rem_from_queue(&ready_queue);
 		setcontext(&(thread.pthread));
 	}
