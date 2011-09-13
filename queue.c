@@ -1,38 +1,48 @@
-/******************************************************************************
- *
- *  File Name........: threadlib.c
- *
- *  Description......: File which contains all the Queue
- *
- *  Created by.......: Mayur Awaghade
- *
- *****************************************************************************/
-
-
-#include"mythread.h"
+#include<stdlib.h>
 #include"threadlib.h"
+#include"mythread.h"
 
-int null_queue(Mythread_queue queue)
-{ 
-	if (queue.head == NULL)	return TRUE;
+int nullQueue(queue q)
+{
+	if(q.head == NULL) return TRUE;
 	return FALSE;
 }
-
-void init_queue(Mythread_queue *queue) { queue -> head = queue -> tail = NULL; }
-
-void add_to_queue(Mythread_queue *queue, MyThread thread)
+void addToQueue(queue *q, Mythread *ptr)
 {
-	if(!(null_queue(ready_queue))) queue -> tail -> next = thread;
-	else queue -> head = thread;
-	queue -> tail = thread;
-	queue -> tail -> next =  NULL;
+	if(q->head == NULL)
+	{
+		q->head = q-> tail = ptr;
+	}
+	else
+	{
+		q->tail->next = ptr;
+		q->tail = ptr;
+	}
+	ptr -> next = NULL;
+} 
+
+Mythread* remFromQueue(queue *q)
+{
+	Mythread *ptr;
+	ptr = q -> head;
+	if(q -> head!=NULL)
+	{
+		if(q->head->next == NULL)	q->head = q -> tail = NULL;
+		else	q->head = q -> head -> next;
+		ptr -> yieldFlag = FALSE;
+	}
+	return ptr;
 }
 
-Mythread rem_from_queue(Mythread_queue *queue)
+void printQueue(queue q)
 {
-	MyThread thread;
-	thread = queue -> head;
-	if(queue->head != NULL)	queue -> head = queue -> head -> next;
-	return thread;	
-}
-
+	Mythread *ptr;
+	ptr = q.head;
+	printf("Queue is:");
+	while(ptr)
+	{
+		printf("\tThread id: %d, Yield Flag: %d",ptr->threadId,ptr->yieldFlag);
+		ptr = ptr -> next;
+	}
+	printf("\n");	
+} 

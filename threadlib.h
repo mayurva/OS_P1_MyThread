@@ -1,41 +1,52 @@
-/******************************************************************************
- *
- *  File Name........: threadlib.h
- *
- *  Description......: Common data structures definition and declaration
- *
- *  Created by Mayur Awaghade
- *
- *****************************************************************************/
-#ifndef THREADLIB_H
-#define THREADLIB_H
+#include<stdio.h>
+#include<stdlib.h>
+#include<ucontext.h>
 
+#ifndef THREADLIB
+#define THREADLIB
+
+//#define DEBUG_FLAG
+
+#define FALSE 0
 #define TRUE 1
-#define FLASE 0
+#define STACK_SIZE 64<<10	//check this for real threads
 
-#define STACK_SIZE 8<<10
+//typedef struct queue_;
 
-//This structure is used to store a context of MyThread
-typedef struct _MyThread_{
-	struct _MyThread_ *childlist;
-	ucontext_t pthread;
-	struct _MyThread_ *next;
-} _MyThread;
+typedef struct Mythread_{
+	int threadId;
+	int yieldFlag;
+	int blocked;
+	int parentBlocked;
+	ucontext_t *thread;
+	struct Mythread_ *next;
+	struct Mythread_ *childList;
+	struct Mythread_ *sibling;
+	struct Mythread_ *parentptr;
+}Mythread;
 
-//Below lines declare Thread related functions
+typedef struct queue_{
+	Mythread *head,*tail;	
+}queue;
 
-//This structure points to a dynamic queue of threads
-typedef struct MyThread_list_t{
-	_MyThread *head;
-	_MyThread *tail;
-} Mythread_queue;
+typedef struct MysemNode_{
+	Mythread *thread;
+	struct MysemNode_ *next;
+} MysemNode;
 
-//Below lines declare Queue related functions
-extern Mythread_queue ready_queue;
-extern _Mythread* currRunningThread;
+typedef struct Mysemaphore_{
+	int value;
+	MysemNode *head, *tail;
+} Mysemaphore;
 
-Mythread RemFromQueue(Mythread_queue*);
-void InitQueue(Mythread_queue*);
-void AddToQueue(Mythread_queue*,MyThread thread);
+extern queue readyQueue;
+extern int id;	//We are not using the id yet
+extern Mythread *currThread;	
+extern int *sizeArr;	//need to make this dynamic
 
-#endif //THREADLIB_H
+//add more queue functions
+Mythread* remFromQueue(queue*);
+void addToQueue(queue*, Mythread*);	
+void printQueue(queue);
+int nullQueue(queue);
+#endif
