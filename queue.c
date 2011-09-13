@@ -2,11 +2,14 @@
 #include"threadlib.h"
 #include"mythread.h"
 
+//check if queue is null
 int nullQueue(queue q)
 {
 	if(q.head == NULL) return TRUE;
 	return FALSE;
 }
+
+//Adding a thread to queue
 void addToQueue(queue *q, Mythread *ptr)
 {
 	if(q->head == NULL)
@@ -21,6 +24,7 @@ void addToQueue(queue *q, Mythread *ptr)
 	ptr -> next = NULL;
 } 
 
+//Returning a thrad from queue
 Mythread* remFromQueue(queue *q)
 {
 	Mythread *ptr;
@@ -29,11 +33,12 @@ Mythread* remFromQueue(queue *q)
 	{
 		if(q->head->next == NULL)	q->head = q -> tail = NULL;
 		else	q->head = q -> head -> next;
-		ptr -> yieldFlag = FALSE;
+		ptr -> yieldFlag = FALSE;	//the thread is not yielding. Refer:yieldFlag in threadlib.h
 	}
 	return ptr;
 }
 
+//to print a queue. Used only for debugging
 void printQueue(queue q)
 {
 	Mythread *ptr;

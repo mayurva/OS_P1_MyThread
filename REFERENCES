@@ -1,0 +1,6 @@
+1. http://pubs.opengroup.org/onlinepubs/7908799/xsh/getcontext.html
+   For the understanding of Context Routines, syntax and calls
+
+2. http://en.wikipedia.org/wiki/Setcontext Wikipedia entry for Context Routines. 
+   Used to understand ucontext_t structure and it's use in different context functions. Basic code of Context Routines
+
