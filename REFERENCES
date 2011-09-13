@@ -4,3 +4,6 @@
 2. http://en.wikipedia.org/wiki/Setcontext Wikipedia entry for Context Routines. 
    Used to understand ucontext_t structure and it's use in different context functions. Basic code of Context Routines
 
+3. http://www.gnu.org/software/make/manual/make.html#Overview
+   How to write makefiles
+
