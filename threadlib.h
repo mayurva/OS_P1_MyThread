@@ -14,8 +14,8 @@
 //Structure to represent the thread
 typedef struct Mythread_{
 	int threadId;			//thread id
-
-	int yieldFlag;			
+	//This flag is used to define the flow of execution based on whether the thread is yielding or context is set back after resuming the context of current thread. 
+	int yieldFlag;	 		
 	int blocked;	//this flag indicates the sum of children and semaphores on which the the thread is blocked
 	int parentBlocked;	//Indicates if parent is waiting for child to end
 	ucontext_t *thread;	//used to store 
@@ -39,6 +39,8 @@ typedef struct MysemNode_{
 //This structure is used to store a semaphore
 typedef struct Mysemaphore_{
 	int value;
+	int destroyed;
+	int in_use;
 	MysemNode *head, *tail;
 } Mysemaphore;
 
@@ -47,6 +49,7 @@ extern queue readyQueue;	//to store the ready to execute threads
 extern int id;	//To maintain thread ids
 extern Mythread *currThread;	//Points to the Mythread structure of currently running thread
 extern int *sizeArr;	//Pointer 
+extern ucontext_t *mainPrg;
 
 //Definitions of all queue related functions
 Mythread* remFromQueue(queue*);

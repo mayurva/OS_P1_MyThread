@@ -22,15 +22,15 @@ MyThread MyThreadCreate(void (*start_funct)(void *),void *args)
 {
 	Mythread *t;
 	t = (Mythread*) malloc(sizeof(Mythread));
-	if(t == NULL)	printf("ERROR:Not enough memory to create a Thread.. No thread created\n");
+	if(t == NULL)	perror("ERROR:Not enough memory to create a Thread.. No thread created\n");
 	else
 	{
 		t -> thread = malloc(sizeof(ucontext_t));
-		if(t->thread == NULL)	printf("ERROR:Not enough memory to create a Thread.. No thread created\n");
+		if(t->thread == NULL)	perror("ERROR:Not enough memory to create a Thread.. No thread created\n");
 		else
 		{
 			sizeArr = malloc(STACK_SIZE);
-			if(sizeArr == NULL)	printf("ERROR:Not enough memory to create a Thread.. No thread created\n");
+			if(sizeArr == NULL)	perror("ERROR:Not enough memory to create a Thread.. No thread created\n");
 			else
 			{
 
@@ -92,7 +92,15 @@ void MyThreadYield(void)
 #endif
 		//remove next thread from ready queue
 		t = remFromQueue(&readyQueue);
-
+		if(t == NULL)
+		{
+		#ifdef DEBUG_FLAG
+			printf("No thread in ready to Execute currently\n");
+		#endif
+			setcontext(mainPrg);
+			return;
+		}
+		
 #ifdef DEBUG_FLAG
 		printQueue(readyQueue);
 #endif
@@ -205,9 +213,10 @@ int MyThreadJoin(MyThread thread)
 				#ifdef DEBUG_FLAG
 					printf("No thread in ready to Execute currently\n");
 				#endif
+					setcontext(mainPrg);
 					return;
 				}
-				printf("Yield flag of next thread %d is %d\n",t -> threadId,t -> yieldFlag);
+	
 				t -> yieldFlag = FALSE;
 				currThread = t;
 	
@@ -258,6 +267,7 @@ void MyThreadJoinAll(void)
 		#ifdef DEBUG_FLAG
 			printf("No thread in ready to Execute currently\n");
 		#endif
+			setcontext(mainPrg);
 			return;
 		}
 		t -> yieldFlag = FALSE;
@@ -279,7 +289,12 @@ void MyThreadExit(void)
 #endif
 		Mythread *t;
 		deleteChild();	//Delete from parent's child list
-	
+		t = currThread->childList;
+		while(t!=NULL)
+		{
+			t->parentptr = NULL;
+			t = t -> sibling;
+		}
 		//free the allocated memory
 		free(currThread -> thread -> uc_stack.ss_sp); 
 		free(currThread -> thread);
@@ -297,6 +312,7 @@ void MyThreadExit(void)
 		#ifdef DEBUG_FLAG
 			printf("No thread in ready to Execute currently\n");
 		#endif
+			setcontext(mainPrg);
 			return;
 		}
 		t -> yieldFlag = FALSE;

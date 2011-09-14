@@ -1,10 +1,13 @@
+includes = mythread.h threadlib.h
 objects = queue.o semaphore.o threadlib.o unix_routines.o
+library = mythread.a
 
-libmythread.a: $(objects)
-	ar rcs libmythread.a $(objects)
+$(library): $(objects)
+	ar rcs $(library) $(objects)
 
-$(objects): mythread.h threadlib.h
+$(objects): $(includes)
 
 .PHONY: clean 
 clean:
-	rm mythread.a $(objects) 
+	rm -f $(library) $(objects)
+
