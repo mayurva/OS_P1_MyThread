@@ -1,0 +1,15 @@
+This is a readme file for Mythread library program of OS 501
+The attached zip contains a Makefile
+Note: The makefile does not use the -m32 flag
+
+There are 4 *.c files 
+threadlib.c includes all the thread related routines
+semaphore.c contains all semaphore related functions
+unix_routines.c contains the only functions which a unix process can call
+queue.c has functions to maintain the ready queue of threads
+
+There are two header files
+threadlib.h contains definition of structures and declaration of global variables
+mythread.h is the header file as is provided 
+
+The file REFERENCES contains all the references used.
